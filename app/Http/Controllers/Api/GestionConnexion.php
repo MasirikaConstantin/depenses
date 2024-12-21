@@ -27,7 +27,7 @@ class GestionConnexion extends Controller
 
             $user = User::create([
                 'name' => $validated['name'],
-                'addresse' => $validated['addresse']??nullValue(),
+                'addresse' => $validated['addresse']?? null,
                 'email' => $validated['email'],
                 'image' => $validated['image'],
                 'password' => Hash::make($validated['password']),
