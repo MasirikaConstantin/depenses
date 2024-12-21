@@ -29,7 +29,7 @@ class GestionConnexion extends Controller
                 'name' => $validated['name'],
                 'addresse' => $validated['addresse']?? null,
                 'email' => $validated['email'] ?? null,
-                'image' => $validated['image'],
+                'image' => $validated['image']?? null,
                 'password' => Hash::make($validated['password']),
             ]);
 
