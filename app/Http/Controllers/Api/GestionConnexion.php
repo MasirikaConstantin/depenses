@@ -18,8 +18,6 @@ class GestionConnexion extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'nullable|email|unique:users',
                 'password' => 'required|min:4|confirmed',
-                "lieu_id" => "required|exists:lieus,id",
-                "categorie_id" => "required|exists:categories,id",
                 "address"=>"nullable|min:5",
                 'image'=> ["nullable",'max:5120', 'mimes:png,jpg,jpeg,gif,PNG,JPEG,JPG'],
 
@@ -29,9 +27,7 @@ class GestionConnexion extends Controller
 
             $user = User::create([
                 'name' => $validated['name'],
-                'lieu_id' => $validated['lieu_id'],
                 'address' => $validated['address'],
-                'categorie_id' => $validated['categorie_id'],
                 'email' => $validated['email'],
                 'image' => $validated['image'],
                 'password' => Hash::make($validated['password']),
