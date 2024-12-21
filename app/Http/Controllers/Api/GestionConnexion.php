@@ -18,7 +18,7 @@ class GestionConnexion extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'nullable|email|unique:users',
                 'password' => 'required|min:4|confirmed',
-                "address"=>"nullable|min:5",
+                "addresse"=>"nullable|min:5",
                 'image'=> ["nullable",'max:5120', 'mimes:png,jpg,jpeg,gif,PNG,JPEG,JPG'],
 
                 
@@ -27,7 +27,7 @@ class GestionConnexion extends Controller
 
             $user = User::create([
                 'name' => $validated['name'],
-                'address' => $validated['address'],
+                'addresse' => $validated['addresse'],
                 'email' => $validated['email'],
                 'image' => $validated['image'],
                 'password' => Hash::make($validated['password']),
