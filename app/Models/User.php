@@ -46,4 +46,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            $user->matricule = self::generateMatricule();
+        });
+    }
+    
+    private static function generateMatricule()
+    {
+        $prefix = 'AG';
+        $randomNumber = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 4)); // 4 caractères aléatoires
+        return $prefix . $randomNumber;
+    }
+    public function depenses()
+    {
+        return $this->hasMany(Depense::class);
+    }
 }

@@ -16,20 +16,31 @@ class GestionConnexion extends Controller
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|min:6|confirmed',
+                'email' => 'nullable|email|unique:users',
+                'password' => 'required|min:4|confirmed',
+                "lieu_id" => "required|exists:lieus,id",
+                "categorie_id" => "required|exists:categories,id",
+                "address"=>"nullable|min:5",
+                'image'=> ["nullable",'max:5120', 'mimes:png,jpg,jpeg,gif,PNG,JPEG,JPG'],
+
+                
+
             ]);
 
             $user = User::create([
                 'name' => $validated['name'],
+                'lieu_id' => $validated['lieu_id'],
+                'address' => $validated['address'],
+                'categorie_id' => $validated['categorie_id'],
                 'email' => $validated['email'],
+                'image' => $validated['image'],
                 'password' => Hash::make($validated['password']),
             ]);
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
-                'message' => 'Utilisateur créé avec succès',
+                'message' => 'User créé avec succès',
                 'user' => $user,
                 'access_token' => $token,
                 'token_type' => 'Bearer',
@@ -48,40 +59,42 @@ class GestionConnexion extends Controller
     }
 
     public function login(Request $request)
-    {
-        try {
-            $validated = $request->validate([
-                'email' => 'required|email',
-                'password' => 'required',
-            ]);
+{
+    try {
+        $validated = $request->validate([
+            'matricule' => 'required|string',
+            'password' => 'required',
+        ]);
 
-            if (!Auth::attempt($validated)) {
-                return response()->json([
-                    'message' => 'Identifiants invalides'
-                ], 401);
-            }
+        // Récupérer l'User par son matricule
+        $user = User::where('matricule', $validated['matricule'])->first();
 
-            $user = User::where('email', $validated['email'])->firstOrFail();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
+        if (!$user || !Hash::check($validated['password'], $user->password)) {
             return response()->json([
-                'message' => 'Connexion réussie',
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'user' => $user,
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Erreur de validation',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $e->getMessage()
-            ], 500);
+                'message' => 'Identifiants invalides'
+            ], 401);
         }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Connexion réussie',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,
+        ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Erreur de validation',
+            'errors' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Une erreur est survenue',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 
     public function logout(Request $request)
     {
@@ -107,6 +120,8 @@ class GestionConnexion extends Controller
                 'name' => 'sometimes|string|max:255',
                 'email' => 'sometimes|email|unique:users,email,' . $user->id,
                 'password' => 'sometimes|min:6|confirmed',
+                'image'=> ["nullable",'max:5120', 'mimes:png,jpg,jpeg,gif,PNG,JPEG,JPG'],
+
             ]);
 
             $updateData = [];

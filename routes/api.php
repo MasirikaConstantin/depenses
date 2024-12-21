@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\DepenseController;
 use App\Http\Controllers\Api\GestionConnexion;
+use App\Http\Controllers\Api\DepenseControllerApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,3 +17,7 @@ Route::post('/register', [GestionConnexion::class, 'register']);
 Route::put('/user', [GestionConnexion::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/user', [GestionConnexion::class, 'delete'])->middleware('auth:sanctum');
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('depense', DepenseControllerApi::class);
+    Route::get('/mesdepenses/{user}', [DepenseControllerApi::class,"mesdepenses"]);
+});
