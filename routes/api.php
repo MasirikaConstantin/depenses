@@ -21,3 +21,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('depense', DepenseControllerApi::class);
     Route::get('/mesdepenses/{user}', [DepenseControllerApi::class,"mesdepenses"]);
 });
+
+Route::get('/mesdepensess/{user}', [DepenseControllerApi::class,"mesdepensess"]);

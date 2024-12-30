@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Resources\DepenseResource;
 use App\Http\Requests\DepenseRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use Carbon\Carbon;
 
 class DepenseControllerApi  extends Controller
 {
@@ -64,4 +66,37 @@ class DepenseControllerApi  extends Controller
         return DepenseResource::collection($depenses);
         
     }
+    public function mesdepensess($id)
+{
+    $user = User::findOrFail($id);
+    
+    $depenses = Depense::with(['user', 'categorie'])
+        ->where('user_id', $id)
+        ->orderBy('date', 'desc')
+        ->get();
+
+    if ($depenses->isEmpty()) {
+        
+        return response()->json(['user' => new UserResource($user), 'depenses' => collect(),'dailyTotals'=> collect()]);
+        
+    }
+
+    $depensesGrouped = $depenses->groupBy(function($date) {
+        return Carbon::parse($date->date)->format('Y-m-d');
+    });
+
+    $dailyTotals = $depensesGrouped->map(function($group) {
+        return $group->sum('montant');
+    });
+
+    //return response()->json(['user' => $user, 'depenses' => $user,'depensesGrouped'=> $depensesGrouped, "dailyTotals"=>$dailyTotals]);
+    return response()->json([
+        'user' => new UserResource($user),
+        'depensesGrouped' => $depensesGrouped->map(function ($items) {
+            return DepenseResource::collection($items);
+        }),
+        'dailyTotals' => $dailyTotals,
+    ]);
+//    return view('users.voir', compact('user', 'depensesGrouped', 'dailyTotals'));
+}
 }
