@@ -152,19 +152,30 @@ public function index()
 
     public function voir($id)
 {
+    $user = User::findOrFail($id);
+    
     $depenses = Depense::with(['user', 'categorie'])
-    ->where('user_id', $id)
-    ->orderBy('date', 'desc')
-    ->get()
-    ->groupBy(function($date) {
+        ->where('user_id', $id)
+        ->orderBy('date', 'desc')
+        ->get();
+
+    if ($depenses->isEmpty()) {
+        return view('users.voir', [
+            'user' => $user,
+            'depenses' => collect(),
+            'dailyTotals' => collect()
+        ]);
+    }
+
+    $depensesGrouped = $depenses->groupBy(function($date) {
         return Carbon::parse($date->date)->format('Y-m-d');
     });
 
-    $dailyTotals = $depenses->map(function($group) {
+    $dailyTotals = $depensesGrouped->map(function($group) {
         return $group->sum('montant');
     });
 
-    return view('users.voir', compact('depenses', 'dailyTotals'));
-    
+    return view('users.voir', compact('user', 'depensesGrouped', 'dailyTotals'));
 }
+    
 }

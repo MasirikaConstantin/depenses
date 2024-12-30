@@ -98,7 +98,7 @@
                                     </div>
                                     <div>
                                         <div class="font-medium text-gray-900">{{ $user->name }}</div>
-                                        <div class="text-gray-500 text-sm">ID: {{ $user->id }}</div>
+                                        <div class="text-gray-500 text-sm">ID: {{ $user->id }}-{{  $user->matricule }}</div>
                                     </div>
                                 </div>
                             </td>

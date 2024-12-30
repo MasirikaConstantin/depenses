@@ -5,9 +5,9 @@
         <div class="max-w-4xl mx-auto">
             <!-- En-tête -->
             <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-                <h1 class="text-3xl font-bold text-gray-800 mb-4">
-                    Dépenses de {{ $depenses->first()->first()->user->name }}
-                </h1>
+                 <h1 class="text-3xl font-bold text-gray-800 mb-4">
+                        Dépenses de {{ $user->name }}
+                    </h1>
                 <div class="grid grid-cols-3 gap-4">
                     <div class="bg-blue-50 rounded-lg p-4">
                         <p class="text-sm text-blue-600">Total des dépenses</p>
@@ -24,14 +24,18 @@
                     <div class="bg-purple-50 rounded-lg p-4">
                         <p class="text-sm text-purple-600">Nombre de transactions</p>
                         <p class="text-2xl font-bold text-purple-700">
-                            {{ $depenses->flatten()->count() }}
+                            @if(isset($depensesGrouped) && $depensesGrouped->isNotEmpty())
+                                {{ $depensesGrouped->flatten()->count() }}
+                            @else
+                                0
+                            @endif
                         </p>
                     </div>
                 </div>
             </div>
 
             <!-- Liste des dépenses par jour -->
-            @foreach($depenses as $date => $dailyDepenses)
+            @foreach($depensesGrouped as $date => $dailyDepenses)
             <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-semibold text-gray-800">
