@@ -59,14 +59,14 @@ class DepenseControllerApi  extends Controller
         
         return response()->json(['message' => 'Depense supprimée avec succès']);
     }
-    public function mesdepenses(User $user){
+    public function mesdepensess(User $user){
         $depenses = $user->depenses;
 
         //return response()->json($depenses, 201);
         return DepenseResource::collection($depenses);
         
     }
-    public function mesdepensess($id)
+    public function mesdepenses($id)
 {
     $user = User::findOrFail($id);
     
@@ -89,14 +89,14 @@ class DepenseControllerApi  extends Controller
         return $group->sum('montant');
     });
 
-    //return response()->json(['user' => $user, 'depenses' => $user,'depensesGrouped'=> $depensesGrouped, "dailyTotals"=>$dailyTotals]);
-    return response()->json([
+    return response()->json(['user' => $user, 'depenses' => $user,'depensesGrouped'=> $depensesGrouped, "dailyTotals"=>$dailyTotals]);
+    /*return response()->json([
         'user' => new UserResource($user),
         'depensesGrouped' => $depensesGrouped->map(function ($items) {
             return DepenseResource::collection($items);
         }),
         'dailyTotals' => $dailyTotals,
-    ]);
+    ]);*/
 //    return view('users.voir', compact('user', 'depensesGrouped', 'dailyTotals'));
 }
 }
