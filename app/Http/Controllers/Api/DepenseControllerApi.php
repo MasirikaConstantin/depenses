@@ -69,28 +69,46 @@ class DepenseControllerApi  extends Controller
     public function mesdepenses($id)
 {
     $user = User::findOrFail($id);
-    
+
     $depenses = Depense::with(['user', 'categorie'])
         ->where('user_id', $id)
         ->orderBy('date', 'desc')
         ->get();
 
     if ($depenses->isEmpty()) {
-        
-        return response()->json(['user' => new UserResource($user), 'depenses' => collect(),'dailyTotals'=> collect()]);
-        
+        return response()->json([
+            'user' => new UserResource($user),
+            'depenses' => collect(),
+            'dailyTotals' => collect(),
+        ]);
     }
 
+    // Grouper les dépenses par date
     $depensesGrouped = $depenses->groupBy(function($date) {
         return Carbon::parse($date->date)->format('Y-m-d');
+    })->reverse(); // Inverser les groupes
+
+    // Réorganiser chaque groupe pour afficher en premier l'élément avec `id = 307`
+    $depensesGrouped = $depensesGrouped->map(function ($group) {
+        $specificId = 307; // ID à afficher en premier
+        return $group->sortByDesc(function ($item) use ($specificId) {
+            return $item->id === $specificId ? PHP_INT_MAX : $item->id;
+        })->values(); // Réindexer le tableau
     });
 
+    // Calcul des totaux journaliers
     $dailyTotals = $depensesGrouped->map(function($group) {
         return $group->sum('montant');
     });
 
-    return response()->json(['user' => $user, 'depenses' => $user,'depensesGrouped'=> $depensesGrouped, "dailyTotals"=>$dailyTotals]);
-    /*return response()->json([
+    return response()->json([
+        'user' => new UserResource($user),
+        'depensesGrouped' => $depensesGrouped,
+        'dailyTotals' => $dailyTotals,
+    ]);
+}
+
+ /*return response()->json([
         'user' => new UserResource($user),
         'depensesGrouped' => $depensesGrouped->map(function ($items) {
             return DepenseResource::collection($items);
@@ -98,5 +116,4 @@ class DepenseControllerApi  extends Controller
         'dailyTotals' => $dailyTotals,
     ]);*/
 //    return view('users.voir', compact('user', 'depensesGrouped', 'dailyTotals'));
-}
 }
