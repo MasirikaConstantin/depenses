@@ -86,7 +86,7 @@ class DepenseControllerApi  extends Controller
     // Grouper les dépenses par date
     $depensesGrouped = $depenses->groupBy(function($date) {
         return Carbon::parse($date->date)->format('Y-m-d');
-    })->reverse(); // Inverser les groupes
+    }); // Inverser les groupes
 
     // Réorganiser chaque groupe pour afficher en premier l'élément avec `id = 307`
     $depensesGrouped = $depensesGrouped->map(function ($group) {
