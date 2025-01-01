@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategorieResource;
+use App\Http\Resources\Categorieressource;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 
@@ -13,7 +15,8 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        //
+        $categorie =Categorie::all();
+        return Categorieressource::collection($categorie);
     }
 
     /**

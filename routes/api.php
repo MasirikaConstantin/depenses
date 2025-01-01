@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CategorieController;
 use App\Http\Controllers\Api\DepenseController;
 use App\Http\Controllers\Api\GestionConnexion;
 use App\Http\Controllers\Api\DepenseControllerApi;
@@ -19,6 +20,7 @@ Route::delete('/user', [GestionConnexion::class, 'delete'])->middleware('auth:sa
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('depense', DepenseControllerApi::class);
+    Route::apiResource('categorie', CategorieController::class);
     Route::get('/mesdepenses/{user}', [DepenseControllerApi::class,"mesdepenses"]);
 });
 
