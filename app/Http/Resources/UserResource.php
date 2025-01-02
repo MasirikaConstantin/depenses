@@ -21,6 +21,7 @@ class UserResource extends JsonResource
             'adresse' => $this->adresse,
             'matricule' => $this->matricule,
             'created_at' => $this->created_at,
+            "role"=>$this->role
         ];
     }
 }
