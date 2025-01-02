@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,5 +21,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth','verified','rolemanager:admin'])->group(function () {
     Route::resource('users', UserController::class);
     Route::get('user/{utilisateur}', [UserController::class,"voir"])->name('voir');
+});
+Route::get("/mes",function () {
+    return User::all();
 });
 require __DIR__.'/auth.php';
