@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DepenseController;
 use App\Http\Controllers\Api\GestionConnexion;
 use App\Http\Controllers\Api\DepenseControllerApi;
 use App\Http\Controllers\DepenseControllerStat;
+use App\Http\Controllers\RecurringExpenseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/depenses-par-categorie/{user}', [DepenseControllerStat::class, 'getDepensesParCategorie']);
     Route::get('/depenses-par-jour/{user}', [DepenseControllerStat::class, 'getDepensesParJour']);
     Route::get('/depenses-par-mois/{user}', [DepenseControllerStat::class, 'getDepensesParMois']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('recurring-expenses', RecurringExpenseController::class);
 });
 Route::apiResource('categorie', CategorieController::class)->middleware('auth:sanctum');
 
