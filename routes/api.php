@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\GestionConnexion;
 use App\Http\Controllers\Api\DepenseControllerApi;
 use App\Http\Controllers\DepenseControllerStat;
 use App\Http\Controllers\RecurringExpenseController;
+use App\Models\RecurringExpense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,3 +41,6 @@ Route::apiResource('categorie', CategorieController::class)->middleware('auth:sa
 
 
 Route::get('/mesdepensess/{user}', [DepenseControllerApi::class,"mesdepensess"]);
+Route::get('/rec', function (){
+    return RecurringExpense::all();
+});
