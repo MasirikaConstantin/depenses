@@ -41,6 +41,14 @@ class AdminController extends Controller
     {
         //
     }
+    public function toggleStatus($id)
+    {
+        $user = User::findOrFail($id);
+        $user->role = $user->role === 0 ? 1 : 0; // Basculer entre actif (0) et inactif (1)
+        $user->save();
+    
+        return redirect()->back()->with('success', 'État de l\'utilisateur mis à jour.');
+    }
 
     /**
      * Display the specified resource.

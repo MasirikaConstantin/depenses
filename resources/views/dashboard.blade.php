@@ -109,6 +109,7 @@
                             <span class="text-gray-700 dark:text-gray-200">Nouvel agent</span>
                         </a>
 
+
                         <!--a href="{ { route('lieux.create') }}" class="flex items-center p-4 bg-green-50 dark:bg-green-900/30 rounded-xl hover:bg-green-100 dark:hover:bg-green-900/50 transition-all">
                             <span class="bg-green-500 rounded-lg p-2 mr-3">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,11 +129,11 @@
                                   
                             </span>
                             <span class="text-gray-700 dark:text-gray-200">Toutes les Présences</span>
-                        </a>
+                        </a-->
 
 
 
-                        <a href="{ { route('admin.index') }}" class="flex items-center p-4 bg-red-200 dark:bg-red-900/30 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/50 transition-all">
+                        <a href="{{ route('admin.index') }}" class="flex items-center p-4 bg-red-200 dark:bg-red-900/30 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/50 transition-all">
                             <span class="bg-red-500 rounded-lg p-2 mr-3">
                                 
                                 <svg class="w-6 h-6 text-red-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -152,7 +153,7 @@
                                   
                             </span>
                             <span class="text-gray-700 dark:text-gray-200">Toutes les Catégories</span>
-                        </a-->
+                        </a>
                     </div>
                 </div>
 

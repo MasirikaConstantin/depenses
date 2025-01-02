@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategorieRequest;
 use App\Http\Resources\CategorieResource;
 use App\Http\Resources\Categorieressource;
 use App\Models\Categorie;
@@ -30,9 +31,11 @@ class CategorieController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategorieRequest $request)
     {
-        //
+        $categorie = Categorie::create($request->validated());
+        return response()->json($categorie, 201);
+        
     }
 
     /**

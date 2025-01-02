@@ -11,7 +11,7 @@ class CategorieRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class CategorieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nom'=>"required|min:3",
+            "description"=>"nullable|min:5"
         ];
     }
 }
