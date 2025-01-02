@@ -13,8 +13,8 @@ class RecurringExpense extends Model
     protected $fillable = [
         'user_id',
         'description',
-        'category',
-        'amount',
+        'category_id',
+                'amount',
         'frequency',
         'next_due_date',
         'notification_id',
@@ -24,5 +24,9 @@ class RecurringExpense extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Categorie::class);
     }
 }
