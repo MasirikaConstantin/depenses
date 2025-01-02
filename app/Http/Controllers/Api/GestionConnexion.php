@@ -219,4 +219,40 @@ class GestionConnexion extends Controller
         return $data;
     }
 
+    public function imagedeledata(User $user)
+    {
+        try {
+            if ($user->image) {
+                // Extraire le chemin relatif de l'URL complète
+                $relativePath = str_replace(env('APP_URL') . '/storage/', '', $user->getRawOriginal('image'));
+                
+                // Supprimer le fichier physique
+                if (Storage::disk('public')->exists($relativePath)) {
+                    Storage::disk('public')->delete($relativePath);
+                }
+    
+                // Mettre à null le champ image dans la BDD
+                $user->image = null;
+                $user->save();
+    
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Image supprimée avec succès',
+                    'user' => new UserResource($user)
+                ], 200);
+            }
+    
+            return response()->json([
+                'status' => false,
+                'message' => 'Aucune image à supprimer'
+            ], 404);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Erreur lors de la suppression : ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

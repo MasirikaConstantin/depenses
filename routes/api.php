@@ -18,6 +18,7 @@ Route::post('/register', [GestionConnexion::class, 'register']);
 Route::put('/user', [GestionConnexion::class, 'update'])->middleware('auth:sanctum');
 Route::put('/password', [GestionConnexion::class, 'updatePassword'])->middleware('auth:sanctum');
 Route::post('/image/{user}', [GestionConnexion::class, 'updateImage'])->middleware('auth:sanctum');
+Route::post('/imagedelete/{user}', [GestionConnexion::class, 'imagedeledata'])->middleware('auth:sanctum');
 Route::get('/user/{user}', [GestionConnexion::class, 'show'])->middleware('auth:sanctum');
 Route::delete('/user', [GestionConnexion::class, 'delete'])->middleware('auth:sanctum');
 
