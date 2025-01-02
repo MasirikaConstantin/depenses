@@ -13,7 +13,7 @@ class RecurringExpense extends Model
     protected $fillable = [
         'user_id',
         'description',
-        'category_id',
+        'categorie_id',
                 'amount',
         'frequency',
         'next_due_date',

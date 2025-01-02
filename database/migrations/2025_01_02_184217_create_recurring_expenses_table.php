@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Clé étrangère vers la table users
             $table->string('description');
-            $table->string('category');
+            $table->foreignId('categorie_id')->constrained()->onDelete('cascade'); // Ajouter la clé étrangère
             $table->decimal('amount', 10, 2); // Montant avec 2 décimales
             $table->string('frequency'); // Fréquence (Mensuel, Hebdomadaire, Annuel)
             $table->date('next_due_date'); // Prochaine date d'échéance

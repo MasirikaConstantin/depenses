@@ -24,7 +24,7 @@ class RecurringExpenseController extends Controller
 
         $request->validate([
             'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id', // Validation de la clé étrangère
+            'categorie_id' => 'required|exists:categories,id', // Validation de la clé étrangère
             'amount' => 'required|numeric',
             'frequency' => 'required|string|in:Mensuel,Hebdomadaire,Annuel',
             'next_due_date' => 'required|date',
@@ -32,7 +32,7 @@ class RecurringExpenseController extends Controller
 
         $recurringExpense = RecurringExpense::create([
             'user_id' => $user->id,
-            'category_id' => $request->category_id,
+            'categorie_id' => $request->categorie_id,
             'description' => $request->description,
             'amount' => $request->amount,
             'frequency' => $request->frequency,
@@ -59,7 +59,7 @@ class RecurringExpenseController extends Controller
 
         $request->validate([
             'description' => 'sometimes|string',
-            'category_id' => 'sometimes|exists:categories,id', // Validation de la clé étrangère
+            'categorie_id' => 'sometimes|exists:categories,id', // Validation de la clé étrangère
             'amount' => 'sometimes|numeric',
             'frequency' => 'sometimes|string|in:Mensuel,Hebdomadaire,Annuel',
             'next_due_date' => 'sometimes|date',
