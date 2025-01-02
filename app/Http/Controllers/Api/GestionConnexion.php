@@ -116,6 +116,7 @@ class GestionConnexion extends Controller
             $validated = $request->validate([
                 'name' => 'sometimes|string|max:255',
                 'email' => 'sometimes|email|unique:users,email,' . $user->id,
+                "adresse"=>"nullable|min:5",
                 'password' => 'sometimes|min:6|confirmed',
                 'image'=> ["nullable",'max:5120', 'mimes:png,jpg,jpeg,gif,PNG,JPEG,JPG'],
 
@@ -123,6 +124,7 @@ class GestionConnexion extends Controller
 
             $updateData = [];
             if (isset($validated['name'])) $updateData['name'] = $validated['name'];
+            if (isset($validated['adresse'])) $updateData['adresse'] = $validated['adresse'];
             if (isset($validated['email'])) $updateData['email'] = $validated['email'];
             if (isset($validated['password'])) {
                 $updateData['password'] = Hash::make($validated['password']);
