@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Validation\Rules\Password;
 class GestionConnexion extends Controller
 {
     public function register(Request $request)
@@ -117,7 +117,7 @@ class GestionConnexion extends Controller
                 'name' => 'sometimes|string|max:255',
                 'email' => 'sometimes|email|unique:users,email,' . $user->id,
                 "adresse"=>"nullable|min:5",
-                'password' => 'sometimes|min:6|confirmed',
+                'password' => 'sometimes|min:4|confirmed',
                 'image'=> ["nullable",'max:5120', 'mimes:png,jpg,jpeg,gif,PNG,JPEG,JPG'],
 
             ]);
@@ -168,5 +168,21 @@ class GestionConnexion extends Controller
     }
     public function show(User $user){
         return new UserResource($user);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validateWithBag('updatePassword', [
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required','sometimes','min:4', 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }
