@@ -27,9 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('depense', DepenseControllerApi::class);
     Route::get('/mesdepenses/{user}', [DepenseControllerApi::class,"mesdepenses"]);
     Route::get('/mesdepensesjournaliere/{user}', [DepenseControllerApi::class,"mesdepensesjournaliere"]);
-    Route::get('/depenses-par-categorie', [DepenseControllerStat::class, 'getDepensesParCategorie']);
-    Route::get('/depenses-par-jour', [DepenseControllerStat::class, 'getDepensesParJour']);
-    Route::get('/depenses-par-mois', [DepenseControllerStat::class, 'getDepensesParMois']);
+    Route::get('/depenses-par-categorie/{user}', [DepenseControllerStat::class, 'getDepensesParCategorie']);
+    Route::get('/depenses-par-jour/{user}', [DepenseControllerStat::class, 'getDepensesParJour']);
+    Route::get('/depenses-par-mois/{user}', [DepenseControllerStat::class, 'getDepensesParMois']);
 });
 Route::apiResource('categorie', CategorieController::class)->middleware('auth:sanctum');
 

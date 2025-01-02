@@ -1,11 +1,11 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Depense;
+use App\Models\User;
 
 class DepenseControllerStat extends Controller
 {
@@ -14,10 +14,11 @@ class DepenseControllerStat extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDepensesParCategorie()
+    public function getDepensesParCategorie(User $user)
     {
         $depensesParCategorie = DB::table('depenses')
             ->join('categories', 'depenses.categorie_id', '=', 'categories.id')
+            ->where('depenses.user_id', $user->id)
             ->select('categories.nom as categorie', DB::raw('SUM(depenses.montant) as total'))
             ->groupBy('categories.nom')
             ->get();
@@ -30,9 +31,10 @@ class DepenseControllerStat extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDepensesParJour()
+    public function getDepensesParJour(User $user)
     {
         $depensesParJour = DB::table('depenses')
+            ->where('user_id', $user->id)
             ->select(DB::raw('DATE(depenses.date) as jour'), DB::raw('SUM(depenses.montant) as total'))
             ->groupBy('jour')
             ->orderBy('jour', 'asc')
@@ -46,14 +48,15 @@ class DepenseControllerStat extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDepensesParMois()
-{
-    $depensesParMois = DB::table('depenses')
-        ->select(DB::raw("strftime('%Y-%m', date) as mois"), DB::raw('SUM(montant) as total'))
-        ->groupBy('mois')
-        ->orderBy('mois', 'asc')
-        ->get();
+    public function getDepensesParMois(User $user)
+    {
+        $depensesParMois = DB::table('depenses')
+            ->where('user_id', $user->id)
+            ->select(DB::raw("strftime('%Y-%m', date) as mois"), DB::raw('SUM(montant) as total'))
+            ->groupBy('mois')
+            ->orderBy('mois', 'asc')
+            ->get();
 
-    return response()->json($depensesParMois);
-}
+        return response()->json($depensesParMois);
+    }
 }
