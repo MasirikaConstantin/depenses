@@ -120,10 +120,8 @@ public function mesdepensesjournaliere($id)
         ->get();
 
     if ($depenses->isEmpty()) {
-        return response()->json([
-            'user' => new UserResource($user),
-            'depenses' => collect(),
-            'totalJournalier' => 0,
+        return DepenseResource::collection(collect())->additional([
+            'totalJournalier' => 0
         ]);
     }
 
@@ -135,12 +133,12 @@ public function mesdepensesjournaliere($id)
     // Calcul du total journalier
     $totalJournalier = $depenses->sum('montant');
 
-    return response()->json([
-        'user' => new UserResource($user),
-        'depenses' => $depensesTriees,
-        'totalJournalier' => $totalJournalier,
+    return DepenseResource::collection($depensesTriees)->additional([
+        'totalJournalier' => $totalJournalier
     ]);
 }
+
+//return  DepenseJournalie::collection($depensesTriees);
 
  /*return response()->json([
         'user' => new UserResource($user),
