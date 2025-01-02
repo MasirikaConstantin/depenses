@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminSuite;
+use App\Http\Controllers\DepenseControllerStat;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -25,6 +26,7 @@ Route::middleware(['auth','verified','rolemanager:admin'])->group(function () {
     Route::resource('admin', AdminSuite::class);
     Route::patch('/admin/{id}/toggle-status', [AdminController::class, 'toggleStatus'])->name('admin.toggleStatus');
 
+    
 
 });
 Route::get("/mes",function () {
