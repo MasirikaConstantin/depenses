@@ -108,6 +108,40 @@ class DepenseControllerApi  extends Controller
     ]);
 }
 
+public function mesdepensesjournaliere($id)
+{
+    $user = User::findOrFail($id);
+    $today = Carbon::now()->format('Y-m-d');
+
+    $depenses = Depense::with(['user', 'categorie'])
+        ->where('user_id', $id)
+        ->whereDate('date', $today)
+        ->orderBy('date', 'desc')
+        ->get();
+
+    if ($depenses->isEmpty()) {
+        return response()->json([
+            'user' => new UserResource($user),
+            'depenses' => collect(),
+            'totalJournalier' => 0,
+        ]);
+    }
+
+    // Réorganiser pour afficher en premier l'élément avec `id = 307`
+    $depensesTriees = $depenses->sortByDesc(function ($item) {
+        return $item->id === 307 ? PHP_INT_MAX : $item->id;
+    })->values();
+
+    // Calcul du total journalier
+    $totalJournalier = $depenses->sum('montant');
+
+    return response()->json([
+        'user' => new UserResource($user),
+        'depenses' => $depensesTriees,
+        'totalJournalier' => $totalJournalier,
+    ]);
+}
+
  /*return response()->json([
         'user' => new UserResource($user),
         'depensesGrouped' => $depensesGrouped->map(function ($items) {

@@ -25,6 +25,7 @@ Route::delete('/user', [GestionConnexion::class, 'delete'])->middleware('auth:sa
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('depense', DepenseControllerApi::class);
     Route::get('/mesdepenses/{user}', [DepenseControllerApi::class,"mesdepenses"]);
+    Route::get('/mesdepensesjournaliere/{user}', [DepenseControllerApi::class,"mesdepensesjournaliere"]);
 });
 Route::apiResource('categorie', CategorieController::class)->middleware('auth:sanctum');
 
