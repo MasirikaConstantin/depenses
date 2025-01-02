@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -162,5 +163,8 @@ class GestionConnexion extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+    public function show(User $user){
+        return new UserResource($user);
     }
 }
