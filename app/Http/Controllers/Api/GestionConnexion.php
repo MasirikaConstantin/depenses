@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImageVAlidate;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password;
 class GestionConnexion extends Controller
@@ -185,4 +187,36 @@ class GestionConnexion extends Controller
             'success' => true,
         ]);
     }
+    public function updateImage(User $user,ImageVAlidate $request)
+    {
+       
+        $user->update($this->extractData($user ,$request));
+        
+
+        return new UserResource($user);
+    }
+    private function extractData(User $user,  Request $request){
+
+        $validated =$request->validate([
+            'image'=> ["nullable",'max:5120', 'mimes:png,jpg,jpeg,gif,PNG,JPEG,JPG'],
+
+        ]);
+        $data=[
+            'image' => $validated['image'] ?? '',
+        ];
+        //dd($data);
+        /**
+        * @var UploadedFile $image
+         */
+        $image=$data['image'];
+        if($image==null || $image->getError()){
+            return $data;
+        }
+        if($user->image){
+            Storage::disk('public')->delete($user->image);
+        }
+            $data['image']=$image->store("profil",'public');
+        return $data;
+    }
+
 }
