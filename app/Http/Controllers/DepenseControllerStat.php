@@ -84,31 +84,33 @@ public function getDepensesParSemaine($userId, Request $request)
     $startOfMonth = Carbon::create($year, $month, 1);
     $endOfMonth = $startOfMonth->copy()->endOfMonth();
 
+    // Trouver le premier lundi du mois ou le dernier lundi du mois précédent
+    $firstMonday = $startOfMonth->copy()->startOfWeek();
+    
     $currentWeek = 1;
-    $startOfWeek = $startOfMonth->copy()->startOfWeek();
-    $endOfWeek = $startOfWeek->copy()->endOfWeek();
+    $startOfWeek = $firstMonday;
 
-    while ($startOfWeek->lte($endOfMonth)) {
-        // Ajuster les dates de début et de fin pour rester dans le mois
-        $weekStart = max($startOfWeek, $startOfMonth);
-        $weekEnd = min($endOfWeek, $endOfMonth);
+    do {
+        $endOfWeek = $startOfWeek->copy()->addDays(6); // Ajoute 6 jours pour avoir une semaine complète
 
-        $total = $depenses->whereBetween('date', [$weekStart->toDateString(), $weekEnd->toDateString()])->sum('montant');
+        $total = $depenses->whereBetween('date', [
+            max($startOfWeek, $startOfMonth)->toDateString(),
+            min($endOfWeek, $endOfMonth)->toDateString()
+        ])->sum('montant');
 
-        // N'ajouter la semaine que si elle contient des jours du mois demandé
-        if ($weekEnd->month == $month) {
+        // N'ajouter la semaine que si elle chevauche le mois demandé
+        if ($startOfWeek->lte($endOfMonth) && $endOfWeek->gte($startOfMonth)) {
             $weeks[] = [
                 'week' => $currentWeek,
-                'start_date' => $weekStart->toDateString(),
-                'end_date' => $weekEnd->toDateString(),
+                'start_date' => $startOfWeek->toDateString(),
+                'end_date' => $endOfWeek->toDateString(),
                 'total' => $total,
             ];
             $currentWeek++;
         }
 
-        $startOfWeek->addWeek();
-        $endOfWeek->addWeek();
-    }
+        $startOfWeek->addDays(7);
+    } while ($startOfWeek->lte($endOfMonth));
 
     return response()->json([
         'month' => $month,
