@@ -31,6 +31,7 @@
                             <tr class="border-b border-gray-200 dark:border-gray-700">
                                 <th class="px-4 py-3 text-left">Nom</th>
                                 <th class="px-4 py-3 text-left">Description</th>
+                                <th class="px-4 py-3 text-left">Status</th>
                                 <th class="px-4 py-3 text-left">Date de création</th>
                                 <th class="px-4 py-3 text-left">Actions</th>
                             </tr>
@@ -53,6 +54,11 @@
                                     </div>
                                 </td>
                                 <td class="px-4 py-3">{!! $categorie->description !!}</td>
+                                <td class="px-6 py-4 font-medium">
+                                    <span class="{{ $categorie->status === 1 ? 'text-green-600' : 'text-red-600' }}">
+                                        {{ $categorie->status === 1 ? 'Actif' : 'Inactif' }}
+                                    </span>
+                                </td>
                                 <td class="px-4 py-3">{{ $categorie->created_at ? $categorie->created_at->format('d/m/Y'): "N/A" }}</td>
                                 <td class="px-4 py-3">
                                     <div class="flex space-x-2">
@@ -72,6 +78,17 @@
                                             </button>
                                         </form>
                                     </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <form action="{{ route('toggleStatus', $categorie->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" 
+                                            class="focus:outline-none text-white font-medium rounded-lg text-sm px-5 py-2.5 
+                                                {{ $categorie->status === 1 ? 'bg-red-600 hover:bg-red-800' : 'bg-green-600 hover:bg-green-800' }}">
+                                            {{ $categorie->status === 1 ? 'Désactiver' : 'Activer' }}
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

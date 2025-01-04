@@ -26,6 +26,7 @@ Route::middleware(['auth','verified','rolemanager:admin'])->group(function () {
     Route::get('user/{utilisateur}', [UserController::class,"voir"])->name('voir');
     Route::resource('admin', AdminSuite::class);
     Route::resource('categories', CategorieController::class);
+    Route::patch('categories/{id}/to', [CategorieController::class, "toggleStatus"])->name('toggleStatus');
     Route::patch('/admin/{id}/toggle-status', [AdminController::class, 'toggleStatus'])->name('admin.toggleStatus');
 
     

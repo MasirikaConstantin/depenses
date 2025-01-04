@@ -16,7 +16,7 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        $categorie =Categorie::all();
+        $categorie =Categorie::where("status", 1)->get();
         return Categorieressource::collection($categorie);
     }
 
