@@ -76,7 +76,7 @@ public function getDepensesParSemaine($userId, Request $request)
     // Récupérer les dépenses du mois et de l'année donnés pour l'utilisateur spécifié
     $depenses = Depense::whereYear('date', $year)
         ->whereMonth('date', $month)
-        ->where('user_id', $userId) // Filtrer par utilisateur
+        ->where('user_id', $userId)
         ->get();
 
     // Grouper les dépenses par semaine
@@ -89,16 +89,23 @@ public function getDepensesParSemaine($userId, Request $request)
     $endOfWeek = $startOfWeek->copy()->endOfWeek();
 
     while ($startOfWeek->lte($endOfMonth)) {
-        $total = $depenses->whereBetween('date', [$startOfWeek, $endOfWeek])->sum('montant');
+        // Ajuster les dates de début et de fin pour rester dans le mois
+        $weekStart = max($startOfWeek, $startOfMonth);
+        $weekEnd = min($endOfWeek, $endOfMonth);
 
-        $weeks[] = [
-            'week' => $currentWeek,
-            'start_date' => $startOfWeek->toDateString(),
-            'end_date' => $endOfWeek->toDateString(),
-            'total' => $total,
-        ];
+        $total = $depenses->whereBetween('date', [$weekStart->toDateString(), $weekEnd->toDateString()])->sum('montant');
 
-        $currentWeek++;
+        // N'ajouter la semaine que si elle contient des jours du mois demandé
+        if ($weekEnd->month == $month) {
+            $weeks[] = [
+                'week' => $currentWeek,
+                'start_date' => $weekStart->toDateString(),
+                'end_date' => $weekEnd->toDateString(),
+                'total' => $total,
+            ];
+            $currentWeek++;
+        }
+
         $startOfWeek->addWeek();
         $endOfWeek->addWeek();
     }
@@ -109,7 +116,6 @@ public function getDepensesParSemaine($userId, Request $request)
         'weeks' => $weeks,
     ]);
 }
-
 // Dans votre contrôleur (par exemple, DepenseController.php)
 public function getMoyenneDepensesParJour($userId)
 {
