@@ -32,6 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/depenses-par-categorie/{user}', [DepenseControllerStat::class, 'getDepensesParCategorie']);
     Route::get('/depenses-par-jour/{user}', [DepenseControllerStat::class, 'getDepensesParJour']);
     Route::get('/depenses-par-mois/{user}', [DepenseControllerStat::class, 'getDepensesParMois']);
+    Route::get('/depenses-par-mois/{user}', [DepenseControllerStat::class, 'getDepensesParMois']);
+    Route::get('/depenses-par-semaine/{userId}', [DepenseControllerStat::class, 'getDepensesParSemaine']);
+    Route::get('/moyenne-depenses-par-jour/{userId}', [DepenseControllerStat::class, 'getMoyenneDepensesParJour']);
+    Route::get('/depenses-par-categorie/{userId}', [DepenseControllerStat::class, 'getDepensesParCategorie']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Depense;
 use App\Models\User;
+use Carbon\Carbon;
 
 class DepenseControllerStat extends Controller
 {
@@ -59,4 +60,78 @@ class DepenseControllerStat extends Controller
 
         return response()->json($depensesParMois);
     }
+
+
+// Dans votre contrôleur (par exemple, DepenseController.php)
+public function getDepensesParSemaine($userId, Request $request)
+{
+    $request->validate([
+        'month' => 'required|integer|between:1,12',
+        'year' => 'required|integer',
+    ]);
+
+    $month = $request->input('month');
+    $year = $request->input('year');
+
+    // Récupérer les dépenses du mois et de l'année donnés pour l'utilisateur spécifié
+    $depenses = Depense::whereYear('date', $year)
+        ->whereMonth('date', $month)
+        ->where('user_id', $userId) // Filtrer par utilisateur
+        ->get();
+
+    // Grouper les dépenses par semaine
+    $weeks = [];
+    $startOfMonth = Carbon::create($year, $month, 1);
+    $endOfMonth = $startOfMonth->copy()->endOfMonth();
+
+    $currentWeek = 1;
+    $startOfWeek = $startOfMonth->copy()->startOfWeek();
+    $endOfWeek = $startOfWeek->copy()->endOfWeek();
+
+    while ($startOfWeek->lte($endOfMonth)) {
+        $total = $depenses->whereBetween('date', [$startOfWeek, $endOfWeek])->sum('montant');
+
+        $weeks[] = [
+            'week' => $currentWeek,
+            'start_date' => $startOfWeek->toDateString(),
+            'end_date' => $endOfWeek->toDateString(),
+            'total' => $total,
+        ];
+
+        $currentWeek++;
+        $startOfWeek->addWeek();
+        $endOfWeek->addWeek();
+    }
+
+    return response()->json([
+        'month' => $month,
+        'year' => $year,
+        'weeks' => $weeks,
+    ]);
+}
+
+// Dans votre contrôleur (par exemple, DepenseController.php)
+public function getMoyenneDepensesParJour($userId)
+{
+    $year = Carbon::now()->year;
+
+    $results = [];
+    for ($month = 1; $month <= 12; $month++) {
+        $totalDepenses = Depense::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->where('user_id', $userId) // Filtrer par utilisateur
+            ->sum('montant');
+
+        $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
+        $averagePerDay = $daysInMonth > 0 ? $totalDepenses / $daysInMonth : 0;
+
+        $results[] = [
+            'month' => $month,
+            'month_name' => Carbon::create()->month($month)->locale('fr')->monthName,
+            'average_per_day' => round($averagePerDay, 2),
+        ];
+    }
+
+    return response()->json($results);
+}
 }
