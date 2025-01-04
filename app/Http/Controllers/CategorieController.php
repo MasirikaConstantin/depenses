@@ -22,7 +22,7 @@ class CategorieController extends Controller
      */
     public function create()
     {
-        //
+        return view('categorie.categorienew',['categorie'=>new Categorie()]);
     }
 
     /**
@@ -30,7 +30,14 @@ class CategorieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'status' => 'boolean',
+        ]);
+        ///dd($validated);
+        Categorie::create($validated);
+        return back()->with("success","Categorie créer avec success");
     }
 
     /**

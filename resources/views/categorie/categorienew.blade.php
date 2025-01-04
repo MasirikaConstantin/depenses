@@ -76,7 +76,7 @@
                   </form>
               </div>
              <div class="py-3 px-6">
-                <a href="{{ route('dashboard') }}#categories"
+                <a href="{{ route('categories.index') }}"
    class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
 Retour à l'accueil
                     <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categorie extends Model
 {
-    protected $fillable = ['nom', 'description'];
+    protected $fillable = ['nom', 'description',"status"];
     public function recurringExpenses()
     {
         return $this->hasMany(RecurringExpense::class);
