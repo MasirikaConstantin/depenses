@@ -79,6 +79,17 @@ class User extends Authenticatable
     // Sinon, retourne l'URL avec Storage
     return Storage::disk('public')->url($this->image);
 }
+
+public function profilUrl()
+{
+    // Vérifie si l'image commence déjà par http ou https
+    if (str_starts_with($this->image, 'http')) {
+        return $this->image;
+    }
+    
+    // Sinon, retourne l'URL avec Storage
+    return Storage::disk('public')->url($this->image);
+}
 public function getImageAttribute()
 {
     if ($this->attributes['image']) {
