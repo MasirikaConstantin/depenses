@@ -12,7 +12,8 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Categorie::paginate(10);
+        return view('categorie.index',['categories'=>$categories]);
     }
 
     /**
@@ -58,8 +59,10 @@ class CategorieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categorie $categorie)
+    public function destroy(Categorie $category)
     {
-        //
+        $category->delete();
+        return back()->with("success", "Categorie supprimée avec success");
+
     }
 }

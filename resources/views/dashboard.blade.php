@@ -144,7 +144,7 @@
                             <span class="text-gray-700 dark:text-gray-200">Tous les Administrateurs</span>
                         </a>
 
-                        <a href="{ { route('categories.create') }}" class="flex items-center p-4 bg-yellow-200 dark:bg-yellow-900/30 rounded-xl hover:bg-yellow-100 dark:hover:bg-yellow-900/50 transition-all">
+                        <a href="{{ route('categories.index') }}" class="flex items-center p-4 bg-yellow-200 dark:bg-yellow-900/30 rounded-xl hover:bg-yellow-100 dark:hover:bg-yellow-900/50 transition-all">
                             <span class="bg-yellow-500 rounded-lg p-2 mr-3">
                                 
                                 <svg class="w-6 h-6 text-yellow-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
