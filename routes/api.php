@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DepenseController;
 use App\Http\Controllers\Api\GestionConnexion;
 use App\Http\Controllers\Api\DepenseControllerApi;
 use App\Http\Controllers\DepenseControllerStat;
+use App\Http\Controllers\Api\EntreController;
 use App\Http\Controllers\RecurringExpenseController;
 use App\Models\RecurringExpense;
 use Illuminate\Http\Request;
@@ -42,7 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('recurring-expenses', RecurringExpenseController::class);
 });
 Route::apiResource('categorie', CategorieController::class)->middleware('auth:sanctum');
-
+Route::apiResource('entres', EntreController::class);//->middleware('auth:sanctum');
+Route::get('/mesentres/{user}', [EntreController::class,'mesentrees']);
 
 Route::get('/mesdepensess/{user}', [DepenseControllerApi::class,"mesdepensess"]);
 Route::get('/rec', function (){

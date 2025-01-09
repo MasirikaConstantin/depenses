@@ -69,6 +69,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Depense::class);
     }
+    public function entre()
+    {
+        return $this->hasMany(Entre::class);
+    }
     public function imageUrl()
 {
     // Vérifie si l'image commence déjà par http ou https
