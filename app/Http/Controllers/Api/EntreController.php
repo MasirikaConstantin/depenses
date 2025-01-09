@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Entre;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EntrerUpdate;
 use App\Http\Requests\EntreValidator;
 use App\Http\Resources\EntreRessource;
 use App\Http\Resources\UserResource;
@@ -60,7 +61,7 @@ class EntreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(EntreValidator $request, Entre $entre)
+    public function update(EntrerUpdate $request, Entre $entre)
     {
         $entre->update($request->validated());
         

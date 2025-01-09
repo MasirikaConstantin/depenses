@@ -44,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::apiResource('categorie', CategorieController::class)->middleware('auth:sanctum');
 Route::apiResource('entres', EntreController::class);//->middleware('auth:sanctum');
-Route::get('/mesentres/{user}', [EntreController::class,'mesentrees']);
+Route::get('/mesentres/{user}', [EntreController::class,'mesentrees'])->middleware('auth:sanctum');
 
 Route::get('/mesdepensess/{user}', [DepenseControllerApi::class,"mesdepensess"]);
 Route::get('/rec', function (){
