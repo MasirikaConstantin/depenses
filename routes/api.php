@@ -29,6 +29,7 @@ Route::delete('/user', [GestionConnexion::class, 'delete'])->middleware('auth:sa
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('depense', DepenseControllerApi::class);
     Route::get('/mesdepenses/{user}', [DepenseControllerApi::class,"mesdepenses"]);
+
     Route::get('/mesdepensesjournaliere/{user}', [DepenseControllerApi::class,"mesdepensesjournaliere"]);
     Route::get('/depenses-par-categorie/{user}', [DepenseControllerStat::class, 'getDepensesParCategorie']);
     Route::get('/depenses-par-jour/{user}', [DepenseControllerStat::class, 'getDepensesParJour']);
@@ -36,7 +37,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/depenses-par-mois/{user}', [DepenseControllerStat::class, 'getDepensesParMois']);
     Route::get('/depenses-par-semaine/{userId}', [DepenseControllerStat::class, 'getDepensesParSemaine']);
     Route::get('/moyenne-depenses-par-jour/{userId}', [DepenseControllerStat::class, 'getMoyenneDepensesParJour']);
-    Route::get('/depenses-par-categorie/{userId}', [DepenseControllerStat::class, 'getDepensesParCategorie']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -49,4 +49,14 @@ Route::get('/mesentres/{user}', [EntreController::class,'mesentrees'])->middlewa
 Route::get('/mesdepensess/{user}', [DepenseControllerApi::class,"mesdepensess"]);
 Route::get('/rec', function (){
     return RecurringExpense::all();
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::get('/mesentresjournaliere/{user}', [EntreController::class,"mesentresjournaliere"]);
+    Route::get('/entres-par-jour/{user}', [EntreController::class, 'getEntresParJour']);
+    Route::get('/entres-par-mois/{user}', [EntreController::class, 'getEntresParMois']);
+    Route::get('/entres-par-semaine/{userId}', [EntreController::class, 'getEntresParSemaine']);
+    Route::get('/moyenne-entres-par-jour/{userId}', [EntreController::class, 'getMoyenneEntresParJour']);
 });

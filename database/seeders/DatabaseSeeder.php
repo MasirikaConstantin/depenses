@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-       /*User::factory(10)->create();
+       //User::factory(10)->create();
        Depense::factory(100)->create();
        Entre::factory(300)->create();
-*/
-       $this->call([
+
+       /*$this->call([
         ClearEntresAndDepensesSeeder::class,
-    ]);
+    ]);*/
     }
 }
