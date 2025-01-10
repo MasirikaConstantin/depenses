@@ -255,4 +255,49 @@ class GestionConnexion extends Controller
         }
     }
 
+    public function getMonMatricule(Request $request)
+{
+    // Valider les entrées
+    $request->validate([
+        'name' => 'nullable|string',
+        'email' => 'nullable|string',
+    ]);
+
+    // Récupérer les données de la requête
+    $name = $request->input('name');
+    $email = $request->input('email');
+
+    // Vérifier qu'au moins un des champs est fourni
+    if (empty($name) && empty($email)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Veuillez fournir un nom ou un email.',
+        ], 400);
+    }
+
+    // Rechercher l'utilisateur dans la base de données
+    $user = User::where(function ($query) use ($name, $email) {
+        if (!empty($name)) {
+            $query->where('name', 'like', '%' . $name . '%');
+        }
+        if (!empty($email)) {
+            $query->orWhere('email', $email);
+        }
+    })->first();
+
+    // Vérifier si l'utilisateur a été trouvé
+    if (!$user) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Aucun utilisateur trouvé avec ces informations.',
+        ], 404);
+    }
+
+    // Retourner le matricule de l'utilisateur
+    return response()->json([
+        'success' => true,
+        'matricule' => $user->matricule,
+    ]);
+}
+
 }

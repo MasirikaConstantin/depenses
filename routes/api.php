@@ -60,3 +60,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/entres-par-semaine/{userId}', [EntreController::class, 'getEntresParSemaine']);
     Route::get('/moyenne-entres-par-jour/{userId}', [EntreController::class, 'getMoyenneEntresParJour']);
 });
+Route::get("/monmatricule", [GestionConnexion::class, 'getMonMatricule']);
